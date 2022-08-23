@@ -1,0 +1,17 @@
+{
+    "short_name": "Sleep Assistant",
+    "name": "Sleep Assistant",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "logo_512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "background_color": "#1E1E1E",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#1E1E1E",
+    "description": "Sleep assistant is an application that helps you decide when to sleep"
+}
