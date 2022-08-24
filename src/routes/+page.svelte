@@ -15,7 +15,6 @@
 	import MdAccessAlarm from 'svelte-icons/md/MdAccessAlarm.svelte';
 
 	import Sleeptimes from '$lib/Sleeptimes.svelte';
-	import Modal from '$lib/Modal.svelte';
 
 	let isModalShown = false;
 	let modal = Modals.SLEEP_TIMES;
