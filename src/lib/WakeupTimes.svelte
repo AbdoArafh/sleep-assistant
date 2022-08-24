@@ -2,7 +2,7 @@
 	const minutesToMillis = (minutes: number) => minutes * 60000;
 
 	const format12 = (timeString: string) => {
-		const date = new Date('1970-01-01T' + timeString + 'Z')
+		return new Date('1970-01-01T' + timeString + 'Z')
 			.toLocaleTimeString('en-US', {
 				timeZone: 'UTC',
 				hour12: true,
@@ -10,8 +10,6 @@
 				minute: 'numeric'
 			})
 			.replace(' ', '');
-		console.log(timeString, date);
-		return date;
 	};
 
 	const numbersStrings = ['one', 'two', 'three', 'four', 'five', 'six'];
@@ -24,12 +22,14 @@
 	const sleepCycle = minutesToMillis(90);
 
 	let times: Array<String> = [];
+	export let sleepAt: Date | null = null;
 
 	const calculateTimes = () => {
 		let now = Date.now();
+		if (sleepAt) now = sleepAt.valueOf();
 
 		// adding time to fall asleep
-		now += minutesToMillis(14);
+		if (!sleepAt) now += minutesToMillis(14);
 
 		times = Array.from(Array(6)).map((_, i) => {
 			const time: number = now + (i + 1) * sleepCycle;
@@ -44,9 +44,11 @@
 	onMount(() => {
 		calculateTimes();
 
-		let intervalId = setInterval(calculateTimes, minutesToMillis(1));
+		if (!sleepAt) {
+			let intervalId = setInterval(calculateTimes, minutesToMillis(1));
 
-		return () => clearInterval(intervalId);
+			return () => clearInterval(intervalId);
+		}
 	});
 </script>
 
@@ -62,6 +64,12 @@
 				</li>
 			{/each}
 		</ul>
+		{#if sleepAt}
+			<p>
+				<span class="strong">Tip:</span> an average person takes about
+				<span class="strong">14 minutes</span> to wake up, so plan accordingly!
+			</p>
+		{/if}
 	</div>
 </Modal>
 
@@ -91,10 +99,14 @@
 			li {
 				font-size: 18px;
 			}
+		}
 
-			.strong {
-				font-weight: 600;
-			}
+		.strong {
+			font-weight: 600;
+		}
+
+		p {
+			line-height: 1.6;
 		}
 	}
 </style>

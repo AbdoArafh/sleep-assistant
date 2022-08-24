@@ -2,8 +2,7 @@
 	enum Modals {
 		WAKEUP_TIMES,
 		CLOCK,
-		INFO,
-		WAKEUP_TIMES_CLOCK
+		INFO
 	}
 </script>
 
@@ -19,14 +18,21 @@
 
 	let isModalShown = false;
 	let modal = Modals.WAKEUP_TIMES;
+	let sleepAt: Date | null;
 
 	const closeModal = () => {
 		isModalShown = false;
 	};
 
-	const showModal = (_modal: Modals) => {
+	const showModal = (_modal: Modals, reset?: boolean) => {
+		if (reset) sleepAt = null;
 		modal = _modal;
 		isModalShown = true;
+	};
+
+	const showSleepTimes = (event: CustomEvent) => {
+		sleepAt = event.detail.date;
+		setTimeout(() => showModal(Modals.WAKEUP_TIMES), 100);
 	};
 </script>
 
@@ -40,7 +46,7 @@
 		<MdInfoOutline />
 	</button>
 	<div class="main-icons">
-		<button on:click={() => showModal(Modals.WAKEUP_TIMES)}>
+		<button on:click={() => showModal(Modals.WAKEUP_TIMES, true)}>
 			<span class="icon-wrapper">
 				<FaBed />
 			</span>
@@ -55,9 +61,9 @@
 	{#if isModalShown}
 		<div class="overlay" on:click={closeModal} transition:fly={{ opacity: 0 }} />
 		{#if modal === Modals.WAKEUP_TIMES}
-			<WakeupTimes on:close-modal={closeModal} />
+			<WakeupTimes on:close-modal={closeModal} {sleepAt} />
 		{:else if modal === Modals.CLOCK}
-			<Clock on:close-modal={closeModal} />
+			<Clock on:close-modal={closeModal} on:show-sleep-times={showSleepTimes} />
 		{/if}
 	{/if}
 </section>
@@ -84,7 +90,7 @@
 		background-color: var(--bg);
 
 		.main-icons {
-			--padding: 3rem;
+			--padding: 3.5rem;
 			height: calc(100% - (var(--padding) * 2));
 			padding: var(--padding) calc(var(--padding) * 0.5);
 			display: grid;
@@ -107,7 +113,7 @@
 
 		.info {
 			@include btn;
-			width: 2rem;
+			width: 2.5rem;
 			position: absolute;
 			top: 1rem;
 			left: 0.5rem;

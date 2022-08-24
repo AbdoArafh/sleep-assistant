@@ -1,15 +1,24 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
 
 	import IoIosCloseCircleOutline from 'svelte-icons/io/IoIosCloseCircleOutline.svelte';
 
+	import { createEventDispatcher, onMount } from 'svelte';
+
 	const dispatch = createEventDispatcher();
 
-	const closeModal = () => {
+	export const closeModal = () => {
 		dispatch('close-modal');
 	};
+
+	function handleKeyup(event: KeyboardEvent) {
+		if (event.key === 'Escape') closeModal();
+	}
+	onMount(() => {
+		window.addEventListener('keyup', handleKeyup);
+		return () => window.removeEventListener('keyup', handleKeyup);
+	});
 </script>
 
 <div class="modal" transition:slide={{ easing: expoOut }}>
