@@ -2,7 +2,7 @@
 	const minutesToMillis = (minutes: number) => minutes * 60000;
 
 	const format12 = (timeString: string) => {
-		return new Date('1970-01-01T' + timeString + 'Z')
+		const date = new Date('1970-01-01T' + timeString + 'Z')
 			.toLocaleTimeString('en-US', {
 				timeZone: 'UTC',
 				hour12: true,
@@ -10,6 +10,8 @@
 				minute: 'numeric'
 			})
 			.replace(' ', '');
+		console.log(timeString, date);
+		return date;
 	};
 
 	const numbersStrings = ['one', 'two', 'three', 'four', 'five', 'six'];
@@ -30,10 +32,10 @@
 		now += minutesToMillis(14);
 
 		times = Array.from(Array(6)).map((_, i) => {
-			const time = now + (i + 1) * sleepCycle;
+			const time: number = now + (i + 1) * sleepCycle;
 			const date = new Date(time);
-			let hours = date.getHours();
-			let minutes = date.getMinutes();
+			let hours = date.getHours().toString().padStart(2, '0');
+			let minutes = date.getMinutes().toString().padStart(2, '0');
 			let timeString = `${hours}:${minutes}:00`;
 			return format12(timeString);
 		});
@@ -49,7 +51,7 @@
 </script>
 
 <Modal on:close-modal>
-	<div class="sleep-times">
+	<div class="wakeup-times">
 		<h3>Wake up at these times:</h3>
 		<ul>
 			{#each times as time, index (index)}
@@ -64,7 +66,7 @@
 </Modal>
 
 <style scoped lang="scss">
-	.sleep-times {
+	.wakeup-times {
 		padding-top: 3rem;
 		padding-inline: 1rem;
 

@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
 	enum Modals {
-		SLEEP_TIMES,
+		WAKEUP_TIMES,
 		CLOCK,
 		INFO,
-		SLEEP_TIMES_CLOCK
+		WAKEUP_TIMES_CLOCK
 	}
 </script>
 
@@ -14,11 +14,11 @@
 	import MdInfoOutline from 'svelte-icons/md/MdInfoOutline.svelte';
 	import MdAccessAlarm from 'svelte-icons/md/MdAccessAlarm.svelte';
 
-	import Sleeptimes from '$lib/Sleeptimes.svelte';
+	import WakeupTimes from '$lib/WakeupTimes.svelte';
 	import Clock from '$lib/Clock.svelte';
 
 	let isModalShown = false;
-	let modal = Modals.SLEEP_TIMES;
+	let modal = Modals.WAKEUP_TIMES;
 
 	const closeModal = () => {
 		isModalShown = false;
@@ -40,7 +40,7 @@
 		<MdInfoOutline />
 	</button>
 	<div class="main-icons">
-		<button on:click={() => showModal(Modals.SLEEP_TIMES)}>
+		<button on:click={() => showModal(Modals.WAKEUP_TIMES)}>
 			<span class="icon-wrapper">
 				<FaBed />
 			</span>
@@ -54,8 +54,8 @@
 
 	{#if isModalShown}
 		<div class="overlay" on:click={closeModal} transition:fly={{ opacity: 0 }} />
-		{#if modal === Modals.SLEEP_TIMES}
-			<Sleeptimes on:close-modal={closeModal} />
+		{#if modal === Modals.WAKEUP_TIMES}
+			<WakeupTimes on:close-modal={closeModal} />
 		{:else if modal === Modals.CLOCK}
 			<Clock on:close-modal={closeModal} />
 		{/if}
