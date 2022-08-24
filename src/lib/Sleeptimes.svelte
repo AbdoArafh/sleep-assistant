@@ -50,7 +50,7 @@
 
 <Modal on:close-modal>
 	<div class="sleep-times">
-		<h3>Sleep at these times:</h3>
+		<h3>Wake up at these times:</h3>
 		<ul>
 			{#each times as time, index (index)}
 				<li>
