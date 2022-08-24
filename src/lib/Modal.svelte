@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { fly } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
+	import { expoOut } from 'svelte/easing';
 
 	import IoIosCloseCircleOutline from 'svelte-icons/io/IoIosCloseCircleOutline.svelte';
 
@@ -11,7 +12,7 @@
 	};
 </script>
 
-<div class="modal" transition:fly={{ y: 100 }}>
+<div class="modal" transition:slide={{ easing: expoOut }}>
 	<button class="close-btn" on:click={closeModal}>
 		<IoIosCloseCircleOutline />
 	</button>

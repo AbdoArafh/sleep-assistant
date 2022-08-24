@@ -1,6 +1,17 @@
 <script context="module" lang="ts">
 	const minutesToMillis = (minutes: number) => minutes * 60000;
 
+	const format12 = (timeString: string) => {
+		return new Date('1970-01-01T' + timeString + 'Z')
+			.toLocaleTimeString('en-US', {
+				timeZone: 'UTC',
+				hour12: true,
+				hour: 'numeric',
+				minute: 'numeric'
+			})
+			.replace(' ', '');
+	};
+
 	const numbersStrings = ['one', 'two', 'three', 'four', 'five', 'six'];
 </script>
 
@@ -21,13 +32,10 @@
 		times = Array.from(Array(6)).map((_, i) => {
 			const time = now + (i + 1) * sleepCycle;
 			const date = new Date(time);
-			let hours = date.getHours() + 1;
-			let isPM = hours > 12;
-			hours = isPM ? hours - 12 : hours;
+			let hours = date.getHours();
 			let minutes = date.getMinutes();
-			return `${hours.toString().padStart(2, '0')}\
-:${minutes.toString().padStart(2, '0')}\
-${isPM ? 'PM' : 'AM'}`;
+			let timeString = `${hours}:${minutes}:00`;
+			return format12(timeString);
 		});
 	};
 
@@ -44,7 +52,7 @@ ${isPM ? 'PM' : 'AM'}`;
 	<div class="sleep-times">
 		<h3>Sleep at these times:</h3>
 		<ul>
-			{#each times as time, index (time)}
+			{#each times as time, index (index)}
 				<li>
 					<span class="strong">{time}</span> for {numbersStrings[index]} sleep {index === 1
 						? 'cycle'

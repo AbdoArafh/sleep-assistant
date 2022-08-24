@@ -15,6 +15,7 @@
 	import MdAccessAlarm from 'svelte-icons/md/MdAccessAlarm.svelte';
 
 	import Sleeptimes from '$lib/Sleeptimes.svelte';
+	import Clock from '$lib/Clock.svelte';
 
 	let isModalShown = false;
 	let modal = Modals.SLEEP_TIMES;
@@ -53,11 +54,10 @@
 
 	{#if isModalShown}
 		<div class="overlay" on:click={closeModal} transition:fly={{ opacity: 0 }} />
-	{/if}
-
-	{#if isModalShown}
 		{#if modal === Modals.SLEEP_TIMES}
 			<Sleeptimes on:close-modal={closeModal} />
+		{:else if modal === Modals.CLOCK}
+			<Clock on:close-modal={closeModal} />
 		{/if}
 	{/if}
 </section>
