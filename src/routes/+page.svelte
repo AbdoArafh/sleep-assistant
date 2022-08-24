@@ -1,11 +1,33 @@
+<script lang="ts" context="module">
+	enum Modals {
+		SLEEP_TIMES,
+		CLOCK,
+		INFO,
+		SLEEP_TIMES_CLOCK
+	}
+</script>
+
 <script lang="ts">
+	import { fly } from 'svelte/transition';
+
 	import FaBed from 'svelte-icons/fa/FaBed.svelte';
 	import MdInfoOutline from 'svelte-icons/md/MdInfoOutline.svelte';
 	import MdAccessAlarm from 'svelte-icons/md/MdAccessAlarm.svelte';
 
-	import { fly } from 'svelte/transition';
+	import Sleeptimes from '$lib/Sleeptimes.svelte';
+	import Modal from '$lib/Modal.svelte';
 
-	let showModals = false;
+	let isModalShown = false;
+	let modal = Modals.SLEEP_TIMES;
+
+	const closeModal = () => {
+		isModalShown = false;
+	};
+
+	const showModal = (_modal: Modals) => {
+		modal = _modal;
+		isModalShown = true;
+	};
 </script>
 
 <svelte:head>
@@ -14,28 +36,30 @@
 </svelte:head>
 
 <section>
-	<button class="info" on:click={() => (showModals = !showModals)}>
+	<button class="info" on:click={() => showModal(Modals.INFO)}>
 		<MdInfoOutline />
 	</button>
 	<div class="main-icons">
-		<button>
+		<button on:click={() => showModal(Modals.SLEEP_TIMES)}>
 			<span class="icon-wrapper">
 				<FaBed />
 			</span>
 		</button>
-		<button>
+		<button on:click={() => showModal(Modals.CLOCK)}>
 			<span class="icon-wrapper">
 				<MdAccessAlarm />
 			</span>
 		</button>
 	</div>
 
-	{#if showModals}
-		<div class="overlay" on:click={() => (showModals = false)} />
+	{#if isModalShown}
+		<div class="overlay" on:click={closeModal} transition:fly={{ opacity: 0 }} />
 	{/if}
 
-	{#if showModals}
-		<div class="modal" transition:fly={{ y: 100 }} />
+	{#if isModalShown}
+		{#if modal === Modals.SLEEP_TIMES}
+			<Sleeptimes on:close-modal={closeModal} />
+		{/if}
 	{/if}
 </section>
 
@@ -56,9 +80,9 @@
 		}
 	}
 	section {
-		height: 100vh;
+		height: 100%;
 		position: relative;
-		background-color: #1d1d1d;
+		background-color: var(--bg);
 
 		.main-icons {
 			--padding: 3rem;
@@ -70,14 +94,14 @@
 
 			button {
 				@include btn;
-				border: 2px solid #ffffff;
+				border: 2px solid var(--text-color);
 				border-radius: 10px;
 				font-size: 1rem;
 
 				.icon-wrapper {
 					position: relative;
 					width: 5rem;
-					color: #ffffff;
+					color: var(--text-color);
 				}
 			}
 		}
@@ -89,7 +113,7 @@
 			top: 1rem;
 			left: 0.5rem;
 			border: none;
-			color: #ffffff;
+			color: var(--text-color);
 		}
 
 		.overlay {
@@ -97,17 +121,6 @@
 			inset: 0;
 			background-color: rgba(0, 0, 0, 0.5);
 			z-index: 0;
-		}
-
-		.modal {
-			width: 80%;
-			height: 80%;
-			background-color: #000000;
-			border-radius: 14px;
-			position: fixed;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
 		}
 	}
 </style>

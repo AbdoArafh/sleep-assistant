@@ -1,4 +1,20 @@
+:root {
+	--text-color: #ffffff;
+	--bg: #1d1d1d;
+}
+
 body {
 	margin: 0;
 	font-family: Poppins, sans-serif;
+	height: 100vh;
+	position: relative;
+}
+
+body,
+html {
+	height: -webkit-fill-available;
+}
+
+body > * {
+	height: 100%;
 }
