@@ -8,6 +8,7 @@
 
 	let times: Array<String> = [];
 	export let sleepAt: Date | null = null;
+	let timeoutId: number;
 
 	const calculateTimes = () => {
 		let now = Date.now();
@@ -24,15 +25,19 @@
 			let timeString = `${hours}:${minutes}:00`;
 			return format12(timeString);
 		});
+
+		if (!sleepAt) {
+			const date = new Date(now);
+			const seconds = date.getSeconds();
+			timeoutId = window.setTimeout(calculateTimes, 60 - seconds);
+		}
 	};
 
 	onMount(() => {
 		calculateTimes();
 
 		if (!sleepAt) {
-			let intervalId = setInterval(calculateTimes, minutesToMillis(1));
-
-			return () => clearInterval(intervalId);
+			return () => clearTimeout(timeoutId);
 		}
 	});
 </script>
